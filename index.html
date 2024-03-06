@@ -1,182 +1,58 @@
-<!DOCTYPE html>
-<html>
 
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Code4Change Registration</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        input[type="text"],
-        input[type="tel"],
-        input[type="email"],
-        select {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        .main {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-        }
-
-        .wrap {
-            text-align: center;
-        }
-
-        button[type="submit"] {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        button[type="submit"]:hover {
-            background-color: #45a049;
-        }
-
-        #message {
-            display: none;
-            color: green;
-            text-align: center;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        #teamMembers {
-            display: none;
-        }
-
-        #teamSizeLabel {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-    </style>
 </head>
-
 <body>
-    <div class="main">
-        <h1>Code4Change</h1>
-        <h3>Team Registration</h3>
+    <section class="container">
+        <header>
+            <h1>Code4Change</h1>
+            <h3>Team Registration</h3>
+        </header>
         <div id="message">Registration Successful! We will contact you soon...</div>
-        <form method="POST" name="google-sheet">
-            <label for="teamName">Team Name:</label>
-            <input type="text" id="teamName" name="Team Name" placeholder="Enter your Team Name" required>
-
-            <label for="first">Team Leader Name:</label>
-            <input type="text" id="first" name="Team Leader Name" placeholder="Enter your Name" required>
-
-            <label for="leaderRegNo">Leader Registration No.:</label>
-            <input type="text" id="leaderRegNo" name="Leader Registration No." placeholder="Enter your Registration No." required>
-
-            <label for="leaderEmail">Leader VIT Email:</label>
-            <input type="email" id="leaderEmail" name="Leader VIT Email" placeholder="Enter your VIT Email" required>
-
-            <label for="leaderPhone">Leader Phone No.:</label>
-            <input type="tel" id="leaderPhone" name="Leader Phone No." placeholder="Enter your Phone No." required>
-
-            <label id="teamSizeLabel" for="teamSize">Team Size:</label>
-            <select id="teamSize" name="Team Size" required>
-                <option value="">Select Team Size</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-            </select>
-
-            <div id="teamMembers">
-                <h4>Team Member Details:</h4>
+        <form method="POST" name="google-sheet" class="form">
+            <div class="input-box">
+                <label for="teamName">Team Name</label>
+                <input type="text" id="teamName" name="Team Name" placeholder="Enter your Team Name" required>
             </div>
-
-            <div class="wrap">
-                <button type="submit" value="submit" name="submit">Submit</button>
+            <div class="input-box">
+                <label for="first">Team Leader Name</label>
+                <input type="text" id="first" name="Team Leader Name" placeholder="Enter your Name" required>
             </div>
+            <div class="input-box">
+                <label for="leaderRegNo">Leader Registration No.</label>
+                <input type="text" id="leaderRegNo" name="Leader Registration No." placeholder="Enter your Registration No." required>
+            </div>
+            <div class="input-box">
+                <label for="leaderEmail">Leader VIT Email</label>
+                <input type="email" id="leaderEmail" name="Leader VIT Email" placeholder="Enter your VIT Email" required>
+            </div>
+            <div class="input-box">
+                <label for="leaderPhone">Leader Phone No.</label>
+                <input type="tel" id="leaderPhone" name="Leader Phone No." placeholder="Enter your Phone No." required>
+            </div>
+            <div class="input-box">
+                <label id="teamSizeLabel" for="teamSize">Team Size</label>
+                <select id="teamSize" name="Team Size" required>
+                    <option value="">Select Team Size</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <div id="teamMembers" class="input-box">
+                <h4>Team Member Details</h4>
+            </div>
+            <button type="submit" value="submit" name="submit">Submit</button>
         </form>
-    </div>
-
-    <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbyF7PyBmDiNPubcD1Yh77OGM8onNFNHPpHxJNsoHFs8r8c_vp02vj0g3pHFgKoePDdBdQ/exec';
-        const form = document.forms['google-sheet'];
-        const message = document.getElementById('message');
-        const teamSizeSelect = document.getElementById('teamSize');
-        const teamMembersDiv = document.getElementById('teamMembers');
-        const phoneRegex = /^\d{10}$/;
-
-        form.addEventListener('submit', e => {
-            e.preventDefault();
-
-            // Check if all required fields are filled
-            if (!form.checkValidity()) {
-                alert("Please fill out all required fields.");
-                return;
-            }
-
-            const leaderPhone = form['Leader Phone No.'].value;
-
-            // Validate phone number
-            if (!phoneRegex.test(leaderPhone)) {
-                alert("Please enter a valid 10-digit phone number.");
-                return;
-            }
-
-            fetch(scriptURL, { method: 'POST', body: new FormData(form) })
-                .then(response => {
-                    message.style.display = 'block';
-                })
-                .catch(error => console.error('Error!', error.message))
-        });
-
-        teamSizeSelect.addEventListener('change', () => {
-            const selectedSize = parseInt(teamSizeSelect.value);
-            let numMembers = selectedSize - 1; // Number of additional members (excluding team leader)
-            if (selectedSize < 2) {
-                numMembers = 0;
-            }
-            teamMembersDiv.innerHTML = ''; // Clear previous member details
-
-            if (selectedSize > 1) {
-                for (let i = 1; i <= numMembers; i++) {
-                    const memberDiv = document.createElement('div');
-                    memberDiv.innerHTML = `
-                        <div>
-                            <label for="member${i}Name">Member ${i} Name:</label>
-                            <input type="text" id="member${i}Name" name="Member ${i} Name" placeholder="Enter member ${i}'s name" required>
-                        </div>
-                        <div>
-                            <label for="member${i}RegNo">Member ${i} Registration No. :</label>
-                            <input type="text" id="member${i}RegNo" name="Member ${i} Registration No." placeholder="Enter member ${i}'s registration number" required>
-                        </div>
-                    `;
-                    teamMembersDiv.appendChild(memberDiv);
-                }
-                teamMembersDiv.style.display = 'block';
-            } else {
-                teamMembersDiv.style.display = 'none';
-            }
-        });
-
-        // Reset form fields and hide message on clicking any input field after successful registration
-        form.addEventListener('input', () => {
-            if (message.style.display === 'block') {
-                form.reset();
-                message.style.display = 'none';
-            }
-        });
-    </script>
+    </section>
+    <script src="script.js"></script>
 </body>
-
 </html>
